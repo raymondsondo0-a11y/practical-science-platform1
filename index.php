@@ -1,5 +1,6 @@
 <?php
 // Practical Science Platform - single public entry point
+// Deployment trigger: rebuild public /htdocs on InfinityFree.
 require __DIR__ . '/app/bootstrap.php';
 require __DIR__ . '/app/data.php';
 
