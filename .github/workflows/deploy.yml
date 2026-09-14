@@ -30,3 +30,4 @@ jobs:
             **/.git*/**
             **/.github/**
             **/node_modules/**
+            DEPLOYMENT_TRIGGER.txt
