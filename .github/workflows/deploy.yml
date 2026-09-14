@@ -11,11 +11,9 @@ jobs:
     name: Deploy website
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-
       - name: Deploy to InfinityFree via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -30,4 +28,6 @@ jobs:
             **/.git*/**
             **/.github/**
             **/node_modules/**
+            movie-config.php
+            **/uploads/**
             DEPLOYMENT_TRIGGER.txt
