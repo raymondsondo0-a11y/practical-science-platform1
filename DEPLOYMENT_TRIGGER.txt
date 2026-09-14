@@ -1,1 +1,1 @@
-Deployment trigger for InfinityFree.
+Deployment trigger for InfinityFree - fixed setup.php PDO interpolation.
