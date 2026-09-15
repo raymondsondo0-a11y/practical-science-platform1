@@ -1,0 +1,19 @@
+<?php
+session_start();
+$configPath=__DIR__.'/config.php';
+$message=''; $error='';
+if($_SERVER['REQUEST_METHOD']==='POST'){
+  $host=trim($_POST['host']??''); $name=trim($_POST['name']??''); $user=trim($_POST['user']??''); $pass=(string)($_POST['pass']??'');
+  if(!$host||!$name||!$user){$error='Host, database name and username are required.';}
+  else {
+    try{
+      $pdo=new PDO("mysql:host={$host};dbname={$name};charset=utf8mb4",$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC]);
+      $sql=file_get_contents(__DIR__.'/schema.sql'); foreach(array_filter(array_map('trim',preg_split('/;\s*(?:\r?\n|$)/',$sql))) as $statement){$pdo->exec($statement);}
+      $cfg="<?php\nreturn ".var_export(['host'=>$host,'name'=>$name,'user'=>$user,'pass'=>$pass,'charset'=>'utf8mb4'],true).";\n";
+      if(file_put_contents($configPath,$cfg,LOCK_EX)===false) throw new RuntimeException('Could not write config.php. Check hosting permissions.');
+      $message='Setup completed. Delete setup.php from your hosting account, then open the homepage.';
+    }catch(Throwable $e){$error='Setup failed: '.htmlspecialchars($e->getMessage());}
+  }
+}
+?>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tanzania Trips Setup</title><style>body{font-family:system-ui;background:#f4f7f5;color:#17221d;margin:0}.box{max-width:560px;margin:8vh auto;background:#fff;padding:30px;border-radius:20px;box-shadow:0 15px 45px #12331d18}h1{color:#138a55}label{font-weight:700;font-size:14px;display:block;margin:13px 0 6px}input{width:100%;padding:12px;box-sizing:border-box;border:1px solid #ccd8d0;border-radius:10px}button{margin-top:18px;width:100%;padding:13px;border:0;border-radius:10px;background:#138a55;color:#fff;font-weight:800}.msg{padding:12px;background:#e4f6eb;border-radius:10px}.err{padding:12px;background:#fff0f0;color:#9b2020;border-radius:10px}small{color:#68756d}</style></head><body><div class="box"><h1>Tanzania Trips</h1><p>One-time database setup for the live PHP/MySQL version.</p><?php if($message): ?><div class="msg"><?=$message?></div><?php endif;?><?php if($error): ?><div class="err"><?=$error?></div><?php endif;?><form method="post"><label>MySQL host</label><input name="host" placeholder="e.g. sqlXXX.infinityfree.com" required><label>Database name</label><input name="name" placeholder="e.g. if0_12345678_trips" required><label>Database username</label><input name="user" placeholder="e.g. if0_12345678" required><label>Database password</label><input name="pass" type="password"><button>Install database</button></form><p><small>After successful installation, delete setup.php for security.</small></p></div></body></html>
