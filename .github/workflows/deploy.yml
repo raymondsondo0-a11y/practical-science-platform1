@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Deploy to raymond.kesug.com
+      - name: Deploy to talisisia.kesug.com
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ftpupload.net
@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
           protocol: ftp
           port: 21
-          server-dir: /raymond.kesug.com/htdocs/
+          server-dir: /talisisia.kesug.com/htdocs/
           exclude: |
             **/.git*
             **/.github/**
