@@ -26,3 +26,5 @@ jobs:
             **/.git*
             **/.github/**
             **/.DS_Store
+            momo_config.php
+            momo_config.php.example
