@@ -1,0 +1,6 @@
+<?php
+// This is a template only. The real momo_config.php is generated during deployment.
+return [
+    'api_key' => 'PUT_MOMO_API_TOKEN_IN_GITHUB_SECRET',
+    'notify_number' => '2557XXXXXXXX',
+];
